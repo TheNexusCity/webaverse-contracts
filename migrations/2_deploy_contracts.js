@@ -19,7 +19,8 @@ const ERC721TokenContractName = "ASSET";
 const ERC721TokenContractSymbol = "ASSET";
 const tokenIsSingleIssue = false;
 const tokenIsPublicallyMintable = true;
-const tokenBaseUri = "https://tokens.webaverse.com/";
+// const tokenBaseUri = "https://tokens.webaverse.com/";
+const tokenBaseUri = "https://ipfs.webaverse.com/";
 const mintFee = 10;
 
 // LAND
@@ -27,7 +28,9 @@ const ERC721LandContractName = "LAND";
 const ERC721LandContractSymbol = "LAND";
 const landIsSingleIssue = true;
 const landIsPublicallyMintable = false;
-const landBaseUri = "https://land.webaverse.com/";
+// const landBaseUri = "https://land.webaverse.com/";
+const landBaseUri = "https://ipfs.webaverse.com/";
+
 
 const NetworkTypes = {
   "mainnet": "mainnet",
@@ -80,7 +83,7 @@ module.exports = async function (deployer) {
   let account = await Account.deployed()
   console.log("Account address is " + account.address)
 
-  await deployer.deploy(ERC20, ERC20ContractName, ERC20Symbol, 10)
+  await deployer.deploy(ERC20, ERC20ContractName, ERC20Symbol, ERC20MarketCap)
   let erc20 = await ERC20.deployed()
   const ERC20Address = erc20.address;
   
