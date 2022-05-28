@@ -167,7 +167,7 @@ contract WebaverseERC721 is ERC721 {
     /**
      * @dev Mint one or more non-fungible tokens with this contract
      * The count parameter is what is looped over to create the token.
-     * This means the hiegher the count, the higher the gas.
+     * This means the higher the count, the higher the gas.
      * This is the main reason that we can only mint so many tokens at once.
      * @param to Address of who is receiving the token on mint
      * Example: 0x08E242bB06D85073e69222aF8273af419d19E4f6
@@ -322,7 +322,24 @@ contract WebaverseERC721 is ERC721 {
         override
         returns (string memory)
     {
-        return string(abi.encodePacked(baseURI(), uint2str(tokenId)));
+        // return string(abi.encodePacked(baseURI(), uint2str(tokenId)));
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        string memory hash;
+        string memory name;
+        string memory ext;
+
+        if (isSingleIssue) {
+            hash = getSingleMetadata(tokenId, "hash");
+            name = tokenIdToHash[tokenId];
+            ext = getSingleMetadata(tokenId, "ext");
+        } else {
+            hash = tokenIdToHash[tokenId];
+            name = getMetadata(hash, "name");
+            ext = getMetadata(hash, "ext");
+        }
+
+        return string(abi.encodePacked(baseURI(), hash, "/", name, ".", ext));
     }
 
     /**

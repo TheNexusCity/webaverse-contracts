@@ -22,7 +22,8 @@
     "deploy-polygon-testnet": "truffle migrate --network testnetpolygon",
     "deploy-polygon-testnet-reset": "truffle migrate --network testnetpolygon --reset",
     "deploy-polygon": "truffle migrate --network polygon",
-    "deploy-polygon-reset": "truffle migrate --network polygon --reset"
+    "deploy-polygon-reset": "truffle migrate --network polygon --reset",
+    "deploy-verify": "truffle run verify WebaverseAccount WebaverseERC20 WebaverseERC20Proxy WebaverseERC721 WebaverseERC721Proxy WebaverseTrade --network testnetpolygon"
   },
   "author": "",
   "license": "ISC",
@@ -31,9 +32,11 @@
   },
   "homepage": "https://github.com/webaverse/contracts#readme",
   "dependencies": {
-    "@truffle/hdwallet-provider": "1.2.3",
+    "@truffle/hdwallet-provider": "^2.0.8",
     "dotenv": "^8.2.0",
+    "solc": "0.6.2",
     "truffle": "^5.2.5",
+    "truffle-plugin-verify": "^0.5.25",
     "web3": "^1.3.4"
   }
 }
