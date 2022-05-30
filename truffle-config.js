@@ -26,8 +26,8 @@ module.exports = {
       provider: () => new HDWalletProvider(process.env.testnetpolygon, `https://matic-mumbai.chainstacklabs.com`),
       network_id: 80001,
       confirmations: 1,
-      timeoutBlocks: 500,
-      networkCheckTimeout: 20000,
+      timeoutBlocks: 1500,
+      networkCheckTimeout: 120000,
       skipDryRun: true
     },
     mainnet: {

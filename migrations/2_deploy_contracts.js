@@ -21,7 +21,8 @@ const tokenIsSingleIssue = false;
 const tokenIsPublicallyMintable = true;
 // const tokenBaseUri = "https://tokens.webaverse.com/";
 const tokenBaseUri = "https://ipfs.webaverse.com/";
-const mintFee = 10;
+// const mintFee = 10; // mintFee !=0 in webaverse sidechain 
+const mintFee = 0; // minFee = 0 in Polygon and Polygon testchain: mumbai.
 
 // LAND
 const ERC721LandContractName = "LAND";
@@ -152,6 +153,7 @@ module.exports = async function (deployer) {
   /** parentERC20Address, parentERC721Address, signerAddress */
   await deployer.deploy(Trade, ERC20Address, ERC721Address, signer[networkType])
   let trade = await Trade.deployed()
+  const TradeAddress = trade.address;
   console.log("Trade address is " + trade.address);
 
   console.log("*******************************")
@@ -167,6 +169,7 @@ module.exports = async function (deployer) {
   console.log(" \"NFTProxy\": " + "\"" + ERC721ProxyAddress + "\",");
   console.log(" \"LAND\": " + "\"" + ERC721LANDAddress + "\",");
   console.log(" \"LANDProxy\": " + "\"" + ERC721LANDProxy.address + "\",");
+  console.log(" \"Trade\": " + "\"" + TradeAddress + "\",");
   console.log("}");
   console.log("*******************************")
 
