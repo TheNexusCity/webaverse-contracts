@@ -5,6 +5,7 @@ pragma experimental ABIEncoderV2;
 import "./ERC721.sol";
 import "./EnumerableSet.sol";
 import "./Math.sol";
+import "./Base64.sol";
 import "./WebaverseERC20.sol";
 
 /**
@@ -184,6 +185,7 @@ contract WebaverseERC721 is ERC721 {
         string memory hash,
         string memory name,
         string memory ext,
+        string memory avatarUrl,
         string memory description,
         uint256 count
     ) public {
@@ -213,6 +215,7 @@ contract WebaverseERC721 is ERC721 {
         hashToTotalSupply[hash] = count;
         hashToMetadata[hash].push(Metadata("name", name));
         hashToMetadata[hash].push(Metadata("ext", ext));
+        hashToMetadata[hash].push(Metadata("avatarUrl", avatarUrl));
         hashToMetadata[hash].push(Metadata("description", description));
         hashToCollaborators[hash].push(to);
 
@@ -322,24 +325,55 @@ contract WebaverseERC721 is ERC721 {
         override
         returns (string memory)
     {
-        // return string(abi.encodePacked(baseURI(), uint2str(tokenId)));
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
         string memory hash;
         string memory name;
         string memory ext;
+        string memory contractURI;
+        string memory imageURI;
+        string memory avatarURI;
+        string memory description;
 
         if (isSingleIssue) {
             hash = getSingleMetadata(tokenId, "hash");
             name = tokenIdToHash[tokenId];
             ext = getSingleMetadata(tokenId, "ext");
+            avatarURI = getSingleMetadata(tokenId, "avatarUrl");
+            description = getSingleMetadata(tokenId, "description");
         } else {
             hash = tokenIdToHash[tokenId];
             name = getMetadata(hash, "name");
             ext = getMetadata(hash, "ext");
+            avatarURI = getMetadata(hash, "avatarUrl");
+            description = getMetadata(hash, "description");
         }
 
-        return string(abi.encodePacked(baseURI(), hash, "/", name, ".", ext));
+        imageURI = string(abi.encodePacked(baseURI(), hash, "/", name, ".", ext));
+        
+        if(streq(avatarURI, '')) {
+            contractURI = string(abi.encodePacked(
+                    '{"name":"', name,
+                    '", "description": "', description, '"',
+                    ', "image":"', imageURI, '"}'
+                ));
+        } else {
+            contractURI = string(abi.encodePacked(
+                    '{"name":"', name,
+                    '", "description": "', description, '"',
+                    ', "image":"', imageURI, '"}',
+                    ', "animation_url": ', avatarURI
+                ));
+        }
+
+        return string(abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(
+                    bytes(
+                        contractURI
+                    )
+                )
+            ));
     }
 
     /**
