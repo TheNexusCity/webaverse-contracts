@@ -185,6 +185,7 @@ contract WebaverseERC721 is ERC721 {
         string memory hash,
         string memory name,
         string memory ext,
+        string memory imageUrl,
         string memory avatarUrl,
         string memory description,
         uint256 count
@@ -215,6 +216,7 @@ contract WebaverseERC721 is ERC721 {
         hashToTotalSupply[hash] = count;
         hashToMetadata[hash].push(Metadata("name", name));
         hashToMetadata[hash].push(Metadata("ext", ext));
+        hashToMetadata[hash].push(Metadata("imageUrl", imageUrl));
         hashToMetadata[hash].push(Metadata("avatarUrl", avatarUrl));
         hashToMetadata[hash].push(Metadata("description", description));
         hashToCollaborators[hash].push(to);
@@ -339,30 +341,30 @@ contract WebaverseERC721 is ERC721 {
             hash = getSingleMetadata(tokenId, "hash");
             name = tokenIdToHash[tokenId];
             ext = getSingleMetadata(tokenId, "ext");
+            imageURI = getSingleMetadata(tokenId, "imageUrl");
             avatarURI = getSingleMetadata(tokenId, "avatarUrl");
             description = getSingleMetadata(tokenId, "description");
         } else {
             hash = tokenIdToHash[tokenId];
             name = getMetadata(hash, "name");
             ext = getMetadata(hash, "ext");
+            imageURI = getMetadata(hash, "imageUrl");
             avatarURI = getMetadata(hash, "avatarUrl");
             description = getMetadata(hash, "description");
         }
-
-        imageURI = string(abi.encodePacked(baseURI(), hash, "/", name, ".", ext));
         
         if(streq(avatarURI, '')) {
             contractURI = string(abi.encodePacked(
-                    '{"name":"', name,
+                    '{"name": "', name,
                     '", "description": "', description, '"',
                     ', "image":"', imageURI, '"}'
                 ));
         } else {
             contractURI = string(abi.encodePacked(
-                    '{"name":"', name,
+                    '{"name": "', name,
                     '", "description": "', description, '"',
-                    ', "image":"', imageURI, '"}',
-                    ', "animation_url": ', avatarURI
+                    ', "image": "', imageURI, '"',
+                    ', "animation_url": "', avatarURI, '"}'
                 ));
         }
 
