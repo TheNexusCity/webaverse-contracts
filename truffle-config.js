@@ -23,7 +23,7 @@ module.exports = {
       network_id: "1337",
     },
     testnetpolygon: {
-      provider: () => new HDWalletProvider(process.env.testnetpolygon, `https://matic-mumbai.chainstacklabs.com`),
+      provider: () => new HDWalletProvider(process.env.testnetpolygon, "https://matic-testnet-archive-rpc.bwarelabs.com"),
       network_id: 80001,
       confirmations: 1,
       timeoutBlocks: 4500,

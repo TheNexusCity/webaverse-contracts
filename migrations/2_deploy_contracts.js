@@ -1,4 +1,4 @@
-const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+const { deployProxy, upgradeProxy  } = require('@openzeppelin/truffle-upgrades');
 
 const ERC20 = artifacts.require("WebaverseERC20");
 const ERC1155 = artifacts.require("WebaverseERC1155");
@@ -67,16 +67,16 @@ module.exports = async function (deployer) {
 
   console.log("Deploying on the " + networkType + " networkType");
 //////////////////////////// ERC20 ////////////////////////////
-  let erc20 = await deployProxy(ERC20, [ERC20ContractName, ERC20Symbol, ERC20MarketCap], { deployer });
+  let erc20 = await deployProxy(ERC20, [ERC20ContractName, ERC20Symbol, ERC20MarketCap], { initializer: "initialize" });
   const ERC20Address = erc20.address;
   
   console.log("ERC20 address is " + ERC20Address);
 /////////////////////////// ERC1155 //////////////////////////
-  let erc1155 = await deployProxy(ERC1155, [ERC1155TokenContractName, ERC1155TokenContractSymbol, "tokenBaseUri", "0xB565D3A7Bcf568f231726585e0b84f9E2a3722dB"], { deployer });
+  let erc1155 = await deployProxy(ERC1155, [ERC1155TokenContractName, ERC1155TokenContractSymbol, tokenBaseUri, "0xB565D3A7Bcf568f231726585e0b84f9E2a3722dB"], { initializer: "initialize" });
   const ERC1155Address = erc1155.address;
 ////////////////////////////// webaverse /////////////////////////////////
-  let webaverse = await deployProxy(Webaverse, [ERC1155Address, ERC20Address, 0, "0xB565D3A7Bcf568f231726585e0b84f9E2a3722dB"], { deployer })
-const WebaverseAddress = webaverse.address;
+  let webaverse = await deployProxy(Webaverse, [ERC1155Address, ERC20Address, 0, process.env.allowedMintAddress], { initializer: "initialize" })
+  const WebaverseAddress = webaverse.address;
 //////////////////////////////////////////////////////////////////////////
 
   console.log("*******************************")
