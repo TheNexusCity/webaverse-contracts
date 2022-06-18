@@ -67,15 +67,15 @@ module.exports = async function (deployer) {
 
   console.log("Deploying on the " + networkType + " networkType");
 //////////////////////////// ERC20 ////////////////////////////
-  let erc20 = await deployProxy(ERC20, [ERC20ContractName, ERC20Symbol, ERC20MarketCap], { initializer: "initialize" });
+  let erc20 = await deployProxy(ERC20, [ERC20ContractName, ERC20Symbol, ERC20MarketCap], { deployer });
   const ERC20Address = erc20.address;
   
   console.log("ERC20 address is " + ERC20Address);
 /////////////////////////// ERC1155 //////////////////////////
-  let erc1155 = await deployProxy(ERC1155, [ERC1155TokenContractName, ERC1155TokenContractSymbol, tokenBaseUri, process.env.allowedMintAddress], { initializer: "initialize" });
+  let erc1155 = await deployProxy(ERC1155, [ERC1155TokenContractName, ERC1155TokenContractSymbol, tokenBaseUri, process.env.allowedMintAddress], { deployer });
   const ERC1155Address = erc1155.address;
 ////////////////////////////// webaverse /////////////////////////////////
-  let webaverse = await deployProxy(Webaverse, [ERC1155Address, ERC20Address, 0, treasurer[networkType]], { initializer: "initialize" })
+  let webaverse = await deployProxy(Webaverse, [ERC1155Address, ERC20Address, 0, treasurer[networkType]], { deployer })
   const WebaverseAddress = webaverse.address;
 //////////////////////////////////////////////////////////////////////////
 
