@@ -117,6 +117,26 @@ contract Webaverse is OwnableUpgradeable {
         _nftContract.mint(to, balance, uri, data);
     }
 
+    function mintfromVoucher(
+        address to,
+        uint256 balance,
+        string memory uri,
+        bytes memory data,
+        bytes memory signature
+    ) public {
+        if (mintFee() != 0) {
+            require(
+                _silkContract.transferFrom(
+                    msg.sender,
+                    treasuryAddress(),
+                    mintFee()
+                ),
+                "Webaverse: Mint transfer failed"
+            );
+        }
+        _nftContract.mintfromVoucher(to, balance, uri, data, signature);
+    }
+
     /**
      * @notice Mints the a single NFT with given parameters.
      * @param tokenId The id of the token.

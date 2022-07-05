@@ -214,6 +214,30 @@ contract WebaverseERC1155 is
         minters[tokenId] = to;
     }
 
+    function mintfromVoucher(
+        address to,
+        uint256 balance,
+        string memory _uri,
+        bytes memory data,
+        bytes memory signature
+    ) public onlyMinter {
+        uint256 tokenId = getNextTokenId();
+        bytes32 messagehash = keccak256(
+            abi.encodePacked(address(this),owner(),msg.sender)
+        );
+        address signer = messagehash.toEthSignedMessageHash().recover(
+            signature
+        );
+
+        if(owner() == signer) {
+
+        _mint(to, tokenId, balance, data);
+        setTokenURI(tokenId, _uri);
+        _incrementTokenId();
+        _tokenBalances[tokenId] = balance;
+        minters[tokenId] = to;
+    }
+
     /**
      * @notice Mints batch of NFTs with given parameters.
      * @param to The address to which the NFTs will be minted in batch.
