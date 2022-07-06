@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "./WebaverseVoucher.sol";
 
 contract WebaverseERC1155 is
@@ -10,6 +11,8 @@ contract WebaverseERC1155 is
     WebaverseVoucher,
     OwnableUpgradeable
 {
+    using ECDSA for bytes32;
+    
     string private _name;
     string private _symbol;
     mapping(uint256 => string) private _tokenURIs;
@@ -228,8 +231,7 @@ contract WebaverseERC1155 is
         address signer = messagehash.toEthSignedMessageHash().recover(
             signature
         );
-
-        if(owner() == signer) {
+        require(owner() == signer, "Wrong signature!");
 
         _mint(to, tokenId, balance, data);
         setTokenURI(tokenId, _uri);
