@@ -122,7 +122,7 @@ contract Webaverse is OwnableUpgradeable {
         uint256 balance,
         string memory uri,
         bytes memory data,
-        bytes memory signature
+        NFTVoucher calldata voucher
     ) public {
         if (mintFee() != 0) {
             require(
@@ -134,7 +134,7 @@ contract Webaverse is OwnableUpgradeable {
                 "Webaverse: Mint transfer failed"
             );
         }
-        _nftContract.mintfromVoucher(to, balance, uri, data, signature);
+        _nftContract.mintfromVoucher(to, balance, uri, data, voucher);
     }
 
     /**

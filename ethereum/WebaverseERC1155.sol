@@ -222,15 +222,11 @@ contract WebaverseERC1155 is
         uint256 balance,
         string memory _uri,
         bytes memory data,
-        bytes memory signature
+        NFTVoucher calldata voucher
     ) public onlyMinter {
-        uint256 tokenId = getNextTokenId();
-        bytes32 messagehash = keccak256(
-            abi.encodePacked(address(this),owner(),msg.sender)
-        );
-        address signer = messagehash.toEthSignedMessageHash().recover(
-            signature
-        );
+        // make sure signature is valid and get the address of the signer
+        address signer = verifyVoucher(voucher);
+
         require(owner() == signer, "Wrong signature!");
 
         _mint(to, tokenId, balance, data);
