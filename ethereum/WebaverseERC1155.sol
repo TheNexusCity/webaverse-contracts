@@ -23,6 +23,7 @@ contract WebaverseERC1155 is
     bool internal isPublicallyMintable; // whether anyone can mint tokens in this copy of the contract
     mapping(uint256 => attribute[]) internal tokenIdToAttributes; // map of token id to attributes (additional attributes) key-value store
     mapping(uint256 => address) internal minters; // map of tokens to minters
+    mapping(uint256 => bool) public serverVoucher; // official flag
 
     struct attribute {
         string trait_type;
@@ -224,12 +225,14 @@ contract WebaverseERC1155 is
         bytes memory data,
         NFTVoucher calldata voucher
     ) public onlyMinter {
+        uint256 tokenId = getNextTokenId();
         // make sure signature is valid and get the address of the signer
         address signer = verifyVoucher(voucher);
 
         require(owner() == signer, "Wrong signature!");
 
         _mint(to, tokenId, balance, data);
+        serverVoucher[tokenId] = true;
         setTokenURI(tokenId, _uri);
         _incrementTokenId();
         _tokenBalances[tokenId] = balance;
