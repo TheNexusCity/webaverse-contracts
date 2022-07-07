@@ -6,7 +6,10 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./WebaverseERC1155.sol";
 import "./WebaverseERC20.sol";
 
-contract Webaverse is OwnableUpgradeable {
+contract Webaverse is
+    WebaverseVoucher, 
+    OwnableUpgradeable
+{
     WebaverseERC1155 private _nftContract;
     WebaverseERC20 private _silkContract;
     uint256 private _mintFee; // ERC20 fee to mint ERC721
