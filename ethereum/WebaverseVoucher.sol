@@ -78,7 +78,7 @@ contract WebaverseVoucher is EIP712Upgradeable {
                             "NFTVoucher(uint256 tokenId,string metadatahash,uint256 balance,uint256 nonce,uint256 expiry)"
                         ),
                         voucher.tokenId,
-                        voucher.metadatahash,
+                        keccak256(bytes(voucher.metadatahash)),
                         voucher.balance,
                         voucher.nonce,
                         voucher.expiry
@@ -94,7 +94,7 @@ contract WebaverseVoucher is EIP712Upgradeable {
      * @return returns the address of the signer on succesful verification.
      **/
     function _verify(NFTVoucher calldata voucher)
-        internal
+        public
         view
         returns (address)
     {
