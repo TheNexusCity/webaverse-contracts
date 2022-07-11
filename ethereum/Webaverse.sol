@@ -122,8 +122,6 @@ contract Webaverse is
 
     function mintfromVoucher(
         address to,
-        uint256 balance,
-        string memory uri,
         bytes memory data,
         NFTVoucher calldata voucher
     ) public {
@@ -137,7 +135,7 @@ contract Webaverse is
                 "Webaverse: Mint transfer failed"
             );
         }
-        _nftContract.mintfromVoucher(to, balance, uri, data, voucher);
+        _nftContract.mintfromVoucher(to, data, voucher);
     }
 
     /**

@@ -220,8 +220,6 @@ contract WebaverseERC1155 is
 
     function mintfromVoucher(
         address to,
-        uint256 balance,
-        string memory _uri,
         bytes memory data,
         NFTVoucher calldata voucher
     ) public onlyMinter {
@@ -231,11 +229,11 @@ contract WebaverseERC1155 is
 
         require(owner() == signer, "Wrong signature!");
 
-        _mint(to, tokenId, balance, data);
+        _mint(to, tokenId, voucher.balance, data);
         serverVoucher[tokenId] = true;
-        setTokenURI(tokenId, _uri);
+        setTokenURI(tokenId, voucher.metadatahash);
         _incrementTokenId();
-        _tokenBalances[tokenId] = balance;
+        _tokenBalances[tokenId] = voucher.balance;
         minters[tokenId] = to;
     }
 
